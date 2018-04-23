@@ -9,6 +9,7 @@
 	<bean name="userService"
 		class="com.ms.springxmlconfig.service.UserServiceImpl">
 
+		<!-- property name must match UserRepository's setter method name (defined in UserServiceImpl class) -->
 		<property name="userRepository" ref="userRepository" />
 
 	</bean>
