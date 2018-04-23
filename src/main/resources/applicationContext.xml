@@ -9,8 +9,21 @@
 	<bean name="userService"
 		class="com.ms.springxmlconfig.service.UserServiceImpl">
 
+		<!-- use <property> element for setter injection -->
 		<!-- property name (defined in UserServiceImpl class) must match the setter method name for UserRepository -->
 		<property name="userRepository" ref="userRepository" />
 
 	</bean>
+
+	<bean name="adminRepository"
+		class="com.ms.springxmlconfig.repository.AdminRepositoryImpl" />
+
+	<bean name="adminService"
+		class="com.ms.springxmlconfig.service.AdminServiceImpl">
+
+		<!-- use <constructor-arg> element for constructor injection -->
+		<constructor-arg index="0" ref="adminRepository" />
+
+	</bean>
+
 </beans>
