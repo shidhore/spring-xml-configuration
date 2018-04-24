@@ -4,9 +4,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<!-- ======== START : ref based XML configuration ======== -->
-	<bean name="userRepository"
-		class="com.ms.springxmlconfig.repository.UserRepositoryImpl" />
-
+	<!-- using property -->
 	<bean name="userService"
 		class="com.ms.springxmlconfig.service.UserServiceImpl">
 		<!-- use <property> element for setter injection -->
@@ -14,56 +12,44 @@
 		<property name="userRepository" ref="userRepository" />
 	</bean>
 
-	<bean name="adminRepository"
-		class="com.ms.springxmlconfig.repository.AdminRepositoryImpl" />
+	<bean name="userRepository"
+		class="com.ms.springxmlconfig.repository.UserRepositoryImpl" />
 
+
+	<!-- using constructor -->
 	<bean name="adminService"
 		class="com.ms.springxmlconfig.service.AdminServiceImpl">
 		<!-- use <constructor-arg> element for constructor injection -->
 		<constructor-arg index="0" ref="adminRepository" />
 	</bean>
+	
+	<bean name="adminRepository"
+		class="com.ms.springxmlconfig.repository.AdminRepositoryImpl" />
 	<!-- ======== END : ref based XML configuration ======== -->
 
-	<!-- ======== START : XML configuration with Autowire using constructor ======== -->
-	<bean name="guestRepo"
-		class="com.ms.springxmlconfig.repository.GuestRepositoryImpl" />
 
+
+
+	<!-- ======== START : XML configuration with Autowire using constructor ======== -->
 	<!-- note that the value of name attribute (guestServ in this case) must match argument value in appContext.getBean(...) method -->
 	<bean name="guestServ"
 		class="com.ms.springxmlconfig.service.GuestServiceImpl"
 		autowire="constructor" />
+	
+	<bean name="guestRepo"
+		class="com.ms.springxmlconfig.repository.GuestRepositoryImpl" />
 	<!-- ======== END : XML configuration with Autowire using constructor ======== -->
 
-	<!-- ######## START : Uncomment following bean definitions to see issue (stacktrace except below) - when byType is used and two beans of the same type are found ######## -->
-	<!-- WARNING: Exception encountered during context initialization - cancelling 
-		refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: 
-		Error creating bean with name 'guestServ' defined in class path resource 
-		[applicationContext.xml]: Unsatisfied dependency expressed through constructor 
-		parameter 0; nested exception is org.springframework.beans.factory.NoUniqueBeanDefinitionException: 
-		No qualifying bean of type 'com.ms.springxmlconfig.repository.GuestRepository' 
-		available: expected single matching bean but found 2: guestRepo,guestRepoByType 
-		Exception in thread "main" org.springframework.beans.factory.UnsatisfiedDependencyException: 
-		Error creating bean with name 'guestServ' defined in class path resource 
-		[applicationContext.xml]: Unsatisfied dependency expressed through constructor 
-		parameter 0; nested exception is org.springframework.beans.factory.NoUniqueBeanDefinitionException: 
-		No qualifying bean of type 'com.ms.springxmlconfig.repository.GuestRepository' 
-		available: expected single matching bean but found 2: guestRepo,guestRepoByType -->
-		
-		<!-- <bean name="guestRepoByType"
-		class="com.ms.springxmlconfig.repository.GuestRepositoryImpl" /> -->
 
-		<!-- <bean name="guestServByType"
-		class="com.ms.springxmlconfig.service.GuestServiceImpl"
-		autowire="byType" /> -->
-	<!-- ######## END : Uncomment following bean definitions to see issue (stacktrace except below) - when byType is used and two beans of the same type are found ######## -->
-		
+
+
 	<!-- ======== START : XML configuration with Autowire using byType ======== -->
-	<bean name="guestPassRepository" 
-		class="com.ms.springxmlconfig.repository.GuestPassRepositoryImpl" />
-		
 	<bean name="guestService" 
 		class="com.ms.springxmlconfig.service.GuestServiceImpl" 
 		autowire="byType" />
+		
+	<bean name="guestPassRepository" 
+		class="com.ms.springxmlconfig.repository.GuestPassRepositoryImpl" />
 	<!-- ======== END : XML configuration with Autowire using byType ======== -->
 
 </beans>
