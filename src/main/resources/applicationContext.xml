@@ -22,7 +22,7 @@
 		<!-- use <constructor-arg> element for constructor injection -->
 		<constructor-arg index="0" ref="adminRepository" />
 	</bean>
-	
+
 	<bean name="adminRepository"
 		class="com.ms.springxmlconfig.repository.AdminRepositoryImpl" />
 	<!-- ======== END : ref based XML configuration ======== -->
@@ -35,7 +35,7 @@
 	<bean name="guestServ"
 		class="com.ms.springxmlconfig.service.GuestServiceImpl"
 		autowire="constructor" />
-	
+
 	<bean name="guestRepo"
 		class="com.ms.springxmlconfig.repository.GuestRepositoryImpl" />
 	<!-- ======== END : XML configuration with Autowire using constructor ======== -->
@@ -44,12 +44,57 @@
 
 
 	<!-- ======== START : XML configuration with Autowire using byType ======== -->
-	<bean name="guestService" 
-		class="com.ms.springxmlconfig.service.GuestServiceImpl" 
+		<!-- byType does not have to match name - you could change bean name="guestPassRepository" to bean name="guestFoo" and it will still work.
+			it will not work here because there is another bean inside byName section that refers to guestPassRepository byName -->
+	<bean name="guestService"
+		class="com.ms.springxmlconfig.service.GuestServiceImpl"
 		autowire="byType" />
-		
-	<bean name="guestPassRepository" 
+
+	<bean name="guestPassRepository"
 		class="com.ms.springxmlconfig.repository.GuestPassRepositoryImpl" />
+	
+	
+	<!-- ######## START : Uncomment bean definition (bean name="guestPassRepositoryDuplicate") 
+		to see 'No qualifying bean of type...' issue (stacktrace except below) - when byType is used and two beans of the same type are found ######## -->
+	
+		<!-- WARNING: Exception encountered during context initialization - 
+			cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: 
+			Error creating bean with name 'guestService' defined in class path resource [applicationContext.xml]: 
+			Unsatisfied dependency expressed through bean property 'guestPassRepository'; 
+			nested exception is org.springframework.beans.factory.NoUniqueBeanDefinitionException: 
+			No qualifying bean of type 'com.ms.springxmlconfig.repository.GuestPassRepository' available: 
+			expected single matching bean but found 2: guestPassRepository,guestPassRepositoryDuplicate
+			
+			Exception in thread "main" org.springframework.beans.factory.UnsatisfiedDependencyException: 
+			Error creating bean with name 'guestService' defined in class path resource [applicationContext.xml]: 
+			Unsatisfied dependency expressed through bean property 'guestPassRepository'; 
+			nested exception is org.springframework.beans.factory.NoUniqueBeanDefinitionException: 
+			No qualifying bean of type 'com.ms.springxmlconfig.repository.GuestPassRepository' available: 
+			expected single matching bean but found 2: guestPassRepository,guestPassRepositoryDuplicate -->
+			
+	<!-- ######## END : Uncomment bean definition (bean name="guestPassRepositoryDuplicate") 
+		to see 'No qualifying bean of type...' issue (stacktrace except below) - when byType is used and two beans of the same type are found ######## -->
+	
+	<!-- <bean name="guestPassRepositoryDuplicate"
+		class="com.ms.springxmlconfig.repository.GuestPassRepositoryImpl" /> -->
 	<!-- ======== END : XML configuration with Autowire using byType ======== -->
+	
+	
+	
+	<!-- ======== START : XML configuration with Autowire using byName ======== -->
+	
+		<!-- name of setter for guestPassRepository must match bean name in applicationContext.xml file, else a NPE will be thrown; 
+			e.g. if setGuestPassRepository in GuestServiceImpl is changed to setGuestPassRepository1, bean name must be changed 
+			from 'bean name="guestPassRepository"' to 'bean name="guestPassRepository1"' or else byName would fail and a NPE will be thrown. 
+		
+			Similarly, if bean 'bean name="guestPassRepository"' is changed to 'bean name="guestPassRepository1"' then the setter inside 
+			GuestServiceImplmust be changed from setGuestPassRepository to setGuestPassRepository1 or else a NPE will be thrown. 
+		
+			This is because when using byName, Spring looks for the exact name. -->
+			
+	<bean name="guestServiceByName"
+		class="com.ms.springxmlconfig.service.GuestServiceImpl"
+		autowire="byName" />
+	<!-- ======== END : XML configuration with Autowire using byName ======== -->
 
 </beans>
