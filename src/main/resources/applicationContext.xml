@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+		
+	<!-- this is required to read property passwordInPropertiesFile (in app.properties) in UserRepositoryImpl.java class -->
+	<!-- if this element is not specified, value of property passwordInPropertiesFile (in app.properties) would be read in as null in UserRepositoryImpl.java class -->
+	<context:annotation-config />
+		
+	<!-- properties file -->
+	<context:property-placeholder location="app.properties"/>
 
 	<!-- ======== START : ref based XML configuration ======== -->
 	<!-- using property -->
@@ -13,7 +22,13 @@
 	</bean>
 
 	<bean name="userRepository"
-		class="com.ms.springxmlconfig.repository.UserRepositoryImpl" />
+		class="com.ms.springxmlconfig.repository.UserRepositoryImpl">
+		
+		<!-- reading property from properties file app.properties defined above -->
+		<!-- value of value element (denoted by ${}) is the key in properties file -->
+		<property name="usernameInJavaClass" value="${usernameInPropertiesFile}" />
+		
+	</bean>
 
 
 	<!-- using constructor -->
